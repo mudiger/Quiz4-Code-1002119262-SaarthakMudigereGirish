@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Page2</title>
+{% endblock %}
+{% block body %}
+    <div id="myDiv" style="width: 80%; height: 500px;"></div>
+
+    <script>
+        var trace1 = {
+            x: {{ time_query | tojson}}.map(label => 'Trial ' + label),
+            y: {{ query_time | tojson }},
+            type: 'scatter'
+        };
+
+        var data = [trace1];
+
+        Plotly.newPlot('myDiv', data);
+    </script>
+{% endblock %}
