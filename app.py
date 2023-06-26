@@ -36,53 +36,47 @@ def index():
     return render_template("index.html")
 
 
-# @app.route('/page1/', methods=['GET', 'POST'])
-# def page1():
-#     return render_template('1)Page.html')
-
 @app.route("/page1/", methods=['GET', 'POST'])
 def page1():
-    query_time = []
-    # salpics = []
-    time_query = []
-    for i in range(30):
-        time_query.append(i + 1)
+    paira = []
+    pairb = []
+    if request.method == "POST":
+        #num = request.form['num']
+        letter = request.form['letter']
+        amount = request.form['amount']
+        letter.split(",")
+        amount.split(",")
 
-    query = "SELECT id FROM dbo.all_month TABLESAMPLE(1000 ROWS)"
-    for i in time_query:
-        start = time.time()
-        cursor.execute(query)
-        end = time.time()
-        diff = end - start
-        query_time.append(diff)
-
-    '''
-    row = cursor.fetchall()
-    for i in row:
-        salpics.append(i)'''
-
-    return render_template("1)Page.html", query_time=query_time, time_query=time_query)
+        for i in letter:
+            if i!=",":
+                paira.append(i)
+        for i in amount:
+            if i != ",":
+                pairb.append(i)
+    return render_template("1)Page.html", paira=paira, pairb=pairb)
 
 
 @app.route("/page2/", methods=['GET', 'POST'])
 def page2():
-    query_time = []
-    # salpics = []
-    time_query = []
+    paira = []
+    pairb = []
+    if request.method == "POST":
+        #num = request.form['num']
+        letter = request.form['letter']
+        amount = request.form['amount']
+        letter.split(",")
+        amount.split(",")
 
-    for i in range(30):
-        time_query.append(f"Trial {i+1}")
+        for i in letter:
+            if i!=",":
+                paira.append(i)
+        for i in amount:
+            if i != ",":
+                pairb.append(i)
+        pairb.sort()
+    return render_template("2)Page.html", paira=paira, pairb=pairb)
 
-    query = "SELECT id FROM dbo.all_month TABLESAMPLE(1000 ROWS)"
-    for i in time_query:
-        start = time.time()
-        cursor.execute(query)
-        end = time.time()
-        diff = end - start
-        query_time.append(diff)
-
-    return render_template("2)Page.html", query_time=query_time, time_query=time_query)
-
+'''
 
 @app.route("/page3/", methods=['GET', 'POST'])
 def page3():
@@ -144,7 +138,7 @@ def page4():
             redis_time.append(e - s)
 
     return render_template("4)Page.html", query_time=query_time, time_query=time_query, redis_time=redis_time)
-
+'''
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,73 +1,82 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Page4</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Page2</title>
 {% endblock %}
-
 {% block body %}
-<!--    <div style="width: 85%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">-->
-<!--        <h2 style="text-align: center;color:rgb(99, 99, 99);">1000 random tuples</h2>-->
-<!--    </div>-->
+    <div id="bar2Div" style="width: 80%; height: 500px;"></div>
+    <div id="bar1Div" style="width: 80%; height: 500px;"></div>
+    <div id="barDiv" style="width: 80%; height: 500px;"></div>
+    <div id="pieDiv" style="width: 80%; height: 500px;"></div>
+    <div id="myDiv" style="width: 80%; height: 500px;"></div>
+    <div id="scatterDiv" style="width: 80%; height: 500px;"></div>
 
-    <form method="POST">
-        <label for="lat">Enter latitude: </label>
-        <input type="number" id="lat" name="lat">
-        <label for="long">Enter longitude: </label>
-        <input type="number" id="long" name="long">
-        <input type="submit" value="Submit" placeholder="Submit"><br>
-    </form>
 
-    {% if time_query %}
-    <div style="height: 50vh; width: 80%; display: flex; align-items: center; justify-content: center;">
-        <label style="color:rgb(99, 99, 99);">Seconds  </label>
-		<canvas id="myChart"></canvas>
-	</div>
 
     <script>
-		const labels = {{ time_query | tojson}}.map(label => 'Trial ' + label);
+        var trace = {
+            x: {{ query_time | tojson}},
+          y: {{ time_query | tojson }},
+            type: 'histogram',
+          };
+        var data = [trace];
+        Plotly.newPlot('bar2Div', data);
 
-		const data = {
-			labels: labels,
-			datasets: [{
-				label: 'Database',
-				backgroundColor: 'rgb(255, 99, 132)',
-				borderColor: 'rgb(255, 99, 132)',
-				data: {{ query_time | tojson}},
-			}, {
-              label: 'Redis Cache',
-              backgroundColor: 'rgb(54, 162, 235)',
-              borderColor: 'rgb(54, 162, 235)',
-              data: {{ redis_time | tojson }},
-            }]
-		};
 
-		const config = {
-			type: 'line',
-			data: data,
-			options: { maintainAspectRatio: false}
+        var data = [{
+          type: 'bar',
+          x: {{ query_time | tojson}},
+          y: {{ time_query | tojson }},
+          orientation: 'h'
+        }];
 
-		};
+        Plotly.newPlot('bar1Div', data);
 
-		const myChart = new Chart(
-			document.getElementById('myChart'),
-			config
-		);
 
-	</script>
-    {% endif %}
+        var data = [
+            {
+            x: {{ time_query | tojson}},
+            y: {{ query_time | tojson }},
 
-    {% if salpics %}
-        <h2>The earthquakes inside 100km radius are: </h2>
-        <ul style="list-style-type:none">
-            {% for salpic in salpics %}
-            <table>
-                <tr>
-                    <td>{{salpic[0]}}</td>
-                </tr>
-            </table>
-            {% endfor %}
-        </ul>
-    {% endif %}
+            type: 'bar'
+            }
+        ];
+        Plotly.newPlot('barDiv', data);
 
+        data = [{
+        'values': {{query_time | tojson}},
+        'labels': {{time_query | tojson}},
+        'type': 'pie'}]
+        layout = {
+            'height': 400,
+            'width': 1000
+        }
+        var data = data;
+        var layout = layout;
+
+        Plotly.newPlot('pieDiv', data, layout);
+
+
+        var trace1 = {
+            x: {{ time_query | tojson}},
+            y: {{ query_time | tojson }},
+            type: 'scatter'
+        };
+        var data = [trace1];
+
+        Plotly.newPlot('myDiv', data);
+
+
+        var trace1 = {
+          x: {{ time_query | tojson}},
+          y: {{ query_time | tojson }},
+          name: 'Gold',
+          type: 'scatter',
+          mode: 'markers'
+        };
+        var data1 = [trace1];
+
+        Plotly.newPlot('scatterDiv', data1, layout);
+    </script>
 {% endblock %}
