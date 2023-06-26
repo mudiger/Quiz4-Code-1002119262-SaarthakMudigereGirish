@@ -64,13 +64,13 @@ def page2():
         letter.split(",")
         amount.split(",")
 
-        for i in letter:
+        for i in range(30):
             if i!=",":
                 paira.append(i)
+        print(paira)
         for i in amount:
             if i != ",":
                 pairb.append(i)
-        pairb.sort()
     return render_template("2)Page.html", paira=paira, pairb=pairb)
 
 
@@ -87,7 +87,6 @@ def page3():
         letter.split(",")
         amount.split(",")
         b.split(",")
-        print(z)
         for i in letter:
             if i!=",":
                 paira.append(i)
