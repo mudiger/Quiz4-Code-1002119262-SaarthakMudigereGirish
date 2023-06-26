@@ -2,32 +2,59 @@
 
 {% block head %}
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <title>Page1</title>
+    <title>Page3</title>
 {% endblock %}
 
 {% block body %}
-<!--    <div style="width: 85%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">-->
-<!--        <h2 style="text-align: center;color:rgb(99, 99, 99);">1000 random tuples</h2>-->
-<!--    </div>-->
+    <form method="POST">
+        <label for="letter">Enter x: </label>
+        <input type="text" id="letter" name="letter">
+        <label for="amount">Enter y: </label>
+        <input type="text" id="amount" name="amount">
+        <label for="z">Enter c: </label>
+        <input type="text" id="z" name="z">
+        <input type="submit" value="Submit" placeholder="Submit"><br>
+    </form>
 
-    <div id="barDiv" style="width: 80%; height: 500px;"></div>
+{% if paira %}
+    <div id="myDiv" style="width: 90%; height: 500px;"></div>
+
     <script>
-		var trace1 = {
-          x: {{ time_query | tojson}},
-          y: {{ query_time | tojson }},
-          name: 'SF Zoo',
-          type: 'bar'
-        };
-        var trace2 = {
-          x: {{ time_query | tojson}},
-          y: {{ redis_time | tojson }},
-          name: 'LA Zoo',
-          type: 'bar'
-        };
-        var data = [trace1, trace2];
-        var layout = {barmode: 'group'};
-        Plotly.newPlot('barDiv', data, layout);
+      var trace1 = {
+  x: ['', '', ''],
+  y: {{ paira | tojson}},
+  name: 'x',
+  type: 'scatter',
+  mode: 'markers'
+};
 
-	</script>
+var trace2 = {
+  x: ['', '', ''],
+  y: {{ pairb | tojson}},
+  name: 'y',
+  type: 'scatter',
+  mode: 'markers'
+};
 
+var trace3 = {
+  x: ['', '', ''],
+  y: {{ z | tojson}},
+  name: 'c',
+  type: 'scatter',
+  mode: 'markers'
+};
+
+var data = [trace1, trace2, trace3];
+
+var layout = {
+  scattermode: 'group',
+  title: 'Grouped by Country',
+  xaxis: {title: ''},
+  yaxis: {title: ''}
+};
+
+Plotly.newPlot('myDiv', data, layout);
+
+    </script>
+{% endif %}
 {% endblock %}

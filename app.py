@@ -4,7 +4,6 @@ from flask import render_template
 import pyodbc
 import os
 import redis
-import time
 
 
 app = Flask(__name__)
@@ -41,7 +40,6 @@ def page1():
     paira = []
     pairb = []
     if request.method == "POST":
-        #num = request.form['num']
         letter = request.form['letter']
         amount = request.form['amount']
         letter.split(",")
@@ -61,7 +59,6 @@ def page2():
     paira = []
     pairb = []
     if request.method == "POST":
-        #num = request.form['num']
         letter = request.form['letter']
         amount = request.form['amount']
         letter.split(",")
@@ -76,69 +73,32 @@ def page2():
         pairb.sort()
     return render_template("2)Page.html", paira=paira, pairb=pairb)
 
-'''
 
 @app.route("/page3/", methods=['GET', 'POST'])
 def page3():
-    time_query = []
-    query_time = []
-    redis_time = []
-
-    for i in range(30):
-        time_query.append(i + 1)
-
-    query = "SELECT id FROM dbo.all_month TABLESAMPLE(1000 ROWS)"
-    for i in time_query:
-        start = time.time()
-        cursor.execute(query)
-        end = time.time()
-        query_time.append(end-start)
-
-        rows = cursor.fetchall()
-        temp_result = ""
-        for j in rows:
-            temp_result = temp_result + str(j)
-
-        redis_client.set(i, temp_result)
-        s = time.time()
-        temp = redis_client.get(i)
-        e = time.time()
-        redis_time.append(e - s)
-
-    return render_template("3)Page.html", query_time=query_time, time_query=time_query, redis_time=redis_time)
-
-
-@app.route("/page4/", methods=['GET', 'POST'])
-def page4():
-    time_query = []
-    query_time = []
-    redis_time = []
+    paira = []
+    pairb = []
+    z = []
     if request.method == "POST":
-        lat = request.form['lat']
-        long = request.form['long']
-        for i in range(30):
-            time_query.append(i + 1)
+        letter = request.form['letter']
+        amount = request.form['amount']
+        b = request.form['z']
 
-        query = "SELECT place FROM dbo.all_month TABLESAMPLE(1000 ROWS) WHERE (6371 * ACOS(COS(RADIANS(?)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude) - RADIANS(?)) + SIN(RADIANS(?)) * SIN(RADIANS(latitude)))) <= 100; "
-        for i in time_query:
-            start = time.time()
-            cursor.execute(query, lat, long, lat)
-            end = time.time()
-            query_time.append(end-start)
+        letter.split(",")
+        amount.split(",")
+        b.split(",")
+        print(z)
+        for i in letter:
+            if i!=",":
+                paira.append(i)
+        for i in amount:
+            if i != ",":
+                pairb.append(i)
+        for i in b:
+            if i != ",":
+                z.append(i)
+    return render_template("3)Page.html", paira=paira, pairb=pairb, z=z)
 
-            rows = cursor.fetchall()
-            temp_result = ""
-            for j in rows:
-                temp_result = temp_result + str(j)
-
-            redis_client.set(i, temp_result)
-            s = time.time()
-            temp = redis_client.get(i)
-            e = time.time()
-            redis_time.append(e - s)
-
-    return render_template("4)Page.html", query_time=query_time, time_query=time_query, redis_time=redis_time)
-'''
 
 if __name__ == "__main__":
     app.run(debug=True)
