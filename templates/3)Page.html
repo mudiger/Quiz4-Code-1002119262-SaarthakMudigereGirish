@@ -25,7 +25,9 @@
   y: {{ paira | tojson}},
   name: 'x',
   type: 'scatter',
-  mode: 'markers'
+  mode: 'markers',
+          marker: {
+            color: 'green'}
 };
 
 var trace2 = {
@@ -33,7 +35,9 @@ var trace2 = {
   y: {{ pairb | tojson}},
   name: 'y',
   type: 'scatter',
-  mode: 'markers'
+  mode: 'markers',
+          marker: {
+            color: 'black'}
 };
 
 var trace3 = {
@@ -41,7 +45,9 @@ var trace3 = {
   y: {{ z | tojson}},
   name: 'c',
   type: 'scatter',
-  mode: 'markers'
+  mode: 'markers',
+          marker: {
+            color: 'red'}
 };
 
 var data = [trace1, trace2, trace3];
